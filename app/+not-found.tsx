@@ -1,12 +1,18 @@
-import { Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+
 import { Link } from 'expo-router';
-import { Box } from 'components';
+
+import { Box } from '@/components';
+import { useIsLoggedIn } from '@/src/store/auth';
 
 export default function NotFoundScreen() {
+  const isLoggedIn = useIsLoggedIn();
+  const href = isLoggedIn ? '/(tabs)' : '/';
+
   return (
     <Box style={styles.container}>
       <Text style={styles.title}>Página não encontrada</Text>
-      <Link href="/" asChild>
+      <Link href={href} asChild>
         <Text style={styles.link}>Voltar para a página inicial</Text>
       </Link>
     </Box>
