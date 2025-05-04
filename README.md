@@ -1,50 +1,117 @@
-# Welcome to your Expo app 👋
+# Task Manager App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Um aplicativo de gerenciamento de tarefas moderno, desenvolvido com React Native, Expo e TypeScript.
 
-## Get started
+![Task Manager App](src/assets/images/icon.png)
 
-1. Install dependencies
+## 📱 Sobre o Projeto
 
+Task Manager é um aplicativo multiplataforma que permite aos usuários gerenciar suas tarefas diárias de forma eficiente. O aplicativo oferece funcionalidades de autenticação, criação, edição e remoção de tarefas, além de categorização por prioridade e status.
+
+## 🛠️ Tecnologias Utilizadas
+
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [React Navigation](https://reactnavigation.org/)
+- [React Query](https://tanstack.com/query/latest/)
+- [Zustand](https://github.com/pmndrs/zustand)
+- [React Hook Form](https://react-hook-form.com/)
+- [Zod](https://zod.dev/)
+- [MMKV](https://github.com/mrousavy/react-native-mmkv)
+- [Axios](https://axios-http.com/)
+- [Day.js](https://day.js.org/)
+
+## 🗂️ Estrutura do Projeto
+
+```
+src/
+├── assets/              # Imagens, fontes e outros recursos
+├── components/          # Componentes reutilizáveis
+│   ├── icons/           # Componentes de ícones SVG
+│   └── TaskDetailSheet/ # Componente de detalhes de tarefas
+├── hooks/               # Hooks personalizados
+│   ├── auth/            # Hooks de autenticação
+│   └── tabs/            # Hooks para as telas de tarefas
+├── libs/                # Configuração de bibliotecas
+├── providers/           # Providers de contexto React
+├── services/            # Serviços de API
+│   ├── auth/            # Serviços de autenticação
+│   └── task/            # Serviços de tarefas
+├── storage/             # Armazenamento local
+├── store/               # Gerenciamento de estado global
+├── types/               # Tipos TypeScript
+│   ├── enums/           # Enumerações
+│   └── models/          # Interfaces de dados
+└── utils/               # Funções utilitárias
+
+app/                     # Estrutura de rotas do Expo Router
+├── (auth)/              # Rotas de autenticação
+├── (tabs)/              # Rotas do menu principal
+├── edit-task/           # Rota de edição de tarefas
+└── task/                # Rota de visualização de tarefas
+```
+
+## 🚀 Funcionalidades
+
+- **Autenticação**: Login e registro de usuários
+- **Dashboard**: Visão geral das tarefas
+- **Gerenciamento de Tarefas**: Criar, visualizar, editar e excluir tarefas
+- **Filtros**: Filtrar tarefas por prioridade e status
+- **Perfil**: Gerenciamento de dados do usuário
+
+## 📋 Pré-requisitos
+
+- Node.js (v18 ou superior)
+- npm ou yarn
+- iOS Simulator ou Android Emulator para desenvolvimento local
+
+## ⚙️ Instalação
+
+1. Clone o repositório:
    ```bash
+   git clone https://seu-repositorio/task-manager-app.git
+   cd task-manager-app
+   ```
+
+2. Instale as dependências:
+   ```bash
+   yarn install
+   # ou
    npm install
    ```
 
-2. Start the app
-
+3. Inicie o aplicativo:
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## 🧪 Testes
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Execute os testes automatizados:
 
 ```bash
-npm run reset-project
+yarn test
+# ou
+npm test
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🔄 Fluxo de Trabalho de Desenvolvimento
 
-## Learn more
+1. Organize commits em grupos lógicos e pequenos para facilitar o entendimento
+2. Utilize o padrão de commits convencional (feat, fix, chore, etc.)
+3. Mantenha os testes atualizados para novas funcionalidades
 
-To learn more about developing your project with Expo, look at the following resources:
+## 📚 Documentação Adicional
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- [Expo Router](https://docs.expo.dev/router/introduction/)
+- [React Native](https://reactnative.dev/docs/getting-started)
+- [TypeScript](https://www.typescriptlang.org/docs/)
 
-## Join the community
+## 👥 Contribuições
 
-Join our community of developers creating universal apps.
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 📄 Licença
+
+Este projeto está licenciado sob a licença MIT.
