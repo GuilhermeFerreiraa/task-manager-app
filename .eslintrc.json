@@ -5,16 +5,19 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:react-native/all",
-    "prettier"
+    "prettier",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "react", "react-native"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "no-duplicate-imports": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "react-native/no-inline-styles": "warn"
+    "react-native/no-inline-styles": "warn",
+    "import/no-duplicates": ["error", { "considerQueryString": true }]
   },
   "settings": {
     "react": {
@@ -24,4 +27,4 @@
   "env": {
     "react-native/react-native": true
   }
-} 
+}
