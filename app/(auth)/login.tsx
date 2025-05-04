@@ -1,31 +1,20 @@
-import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import { Box, Input } from '../../components';
-import { useForm } from '../../libs/form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
-import { useMutation } from '@tanstack/react-query';
-import { loginSchema, LoginFormData } from '../../types/auth';
-import api from '../../services/api';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
+import { router } from 'expo-router';
+
+import { Box, Input } from '@/components';
+
+import { useLoginForm } from '@/hooks/auth/useLogin';
 
 export default function Login() {
-  const { control, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  });
-
-  const loginMutation = useMutation({
-    mutationFn: async (data: LoginFormData) => {
-      const response = await api.post('/auth/login', data);
-      return response.data;
-    },
-    onSuccess: () => {
-      router.replace('/(tabs)');
-    },
-  });
-
-  const onSubmit = (data: LoginFormData) => {
-    loginMutation.mutate(data);
-  };
+  const { control, handleSubmit, errors, onSubmit } = useLoginForm();
 
   return (
     <KeyboardAvoidingView
@@ -55,13 +44,18 @@ export default function Login() {
             secureTextEntry
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit(onSubmit)}
+            accessibilityRole="button"
+          >
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.link}
             onPress={() => router.push('/(auth)/register')}
+            accessibilityRole="button"
           >
             <Text style={styles.linkText}>Não tem uma conta? Cadastre-se</Text>
           </TouchableOpacity>
@@ -110,4 +104,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
-}); 
+});

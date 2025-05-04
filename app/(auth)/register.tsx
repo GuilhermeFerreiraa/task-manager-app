@@ -1,31 +1,20 @@
-import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
-import { useMutation } from '@tanstack/react-query';
-import { useForm } from '../../libs/form';
-import { RegisterFormData, registerSchema } from '../../types/auth';
-import api from '../../services/api';
-import { Box, Input } from '../../components';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
+import { router } from 'expo-router';
+
+import { Box, Input } from '@/components';
+
+import { useRegisterForm } from '@/hooks/auth/useRegister';
 
 export default function Register() {
-  const { control, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
-  });
-
-  const registerMutation = useMutation({
-    mutationFn: async (data: RegisterFormData) => {
-      const response = await api.post('/auth/register', data);
-      return response.data;
-    },
-    onSuccess: () => {
-      router.replace('/(auth)/login');
-    },
-  });
-
-  const onSubmit = (data: RegisterFormData) => {
-    registerMutation.mutate(data);
-  };
+  const { control, onSubmit, errors, handleSubmit } = useRegisterForm();
 
   return (
     <KeyboardAvoidingView
@@ -64,13 +53,18 @@ export default function Register() {
             secureTextEntry
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit(onSubmit)}
+            accessibilityRole="button"
+          >
             <Text style={styles.buttonText}>Cadastrar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.link}
             onPress={() => router.push('/(auth)/login')}
+            accessibilityRole="button"
           >
             <Text style={styles.linkText}>Já tem uma conta? Faça login</Text>
           </TouchableOpacity>
@@ -118,4 +112,4 @@ const styles = StyleSheet.create({
     color: '#007AFF',
     fontWeight: 'bold',
   },
-}); 
+});
