@@ -1,67 +1,81 @@
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Box, Input } from '../../components';
-import { useForm } from '../../libs/form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { taskSchema, TaskFormData } from '../../types/task';
-import api from '../../services/api';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-export default function NewTask() {
-  const queryClient = useQueryClient();
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-  const { control, handleSubmit, formState: { errors } } = useForm<TaskFormData>({
-    resolver: zodResolver(taskSchema),
-  });
+import { Box, Input, SelectButton } from '@/components';
 
-  const createMutation = useMutation({
-    mutationFn: async (data: TaskFormData) => {
-      const response = await api.post('/tasks', data);
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      router.back();
-    },
-  });
+import { useNewTask } from '@/hooks/tabs/useNewTask';
 
-  const onSubmit = (data: TaskFormData) => {
-    createMutation.mutate(data);
-  };
+import { priorities } from '@/utils/options';
+
+export default function NewTaskScreen() {
+  const { control, handleSubmit, errors, onSubmit, selectedId, setSelectedId } =
+    useNewTask();
 
   return (
-    <Box style={styles.container}>
-      <Text style={styles.title}>Nova Tarefa</Text>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <Box style={styles.container}>
+        <Text style={styles.title}>Nova Tarefa</Text>
 
-      <Input
-        name="title"
-        control={control}
-        label="Título"
-        error={errors.title?.message}
-        placeholder="Título"
-      />
+        <Input
+          name="title"
+          control={control}
+          label="Título"
+          error={errors.title?.message}
+          placeholder="Título"
+        />
 
-      <Input
-        name="description"
-        control={control}
-        label="Descrição"
-        error={errors.description?.message}
-        placeholder="Descrição"
-        multiline
-        numberOfLines={4}
-      />
+        <Input
+          name="description"
+          control={control}
+          label="Descrição"
+          error={errors.description?.message}
+          placeholder="Descrição"
+          multiline
+          numberOfLines={4}
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-        <Text style={styles.buttonText}>Criar Tarefa</Text>
-      </TouchableOpacity>
-    </Box>
+        <Text style={styles.label}>Prioridade</Text>
+        <Box flexDirection="row" marginTop={18} marginBottom={18}>
+          {priorities.map((option) => (
+            <SelectButton
+              key={option.id}
+              title={option.label}
+              selected={selectedId === option.id}
+              onPress={() => setSelectedId(option.id)}
+            />
+          ))}
+        </Box>
+
+        <Input
+          name="due_date"
+          control={control}
+          label="Data de vencimento"
+          error={errors.due_date?.message}
+          placeholder="DD/MM/YYYY"
+        />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSubmit(onSubmit)}
+          accessibilityRole="button"
+        >
+          <Text style={styles.buttonText}>Criar Tarefa</Text>
+        </TouchableOpacity>
+      </Box>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   title: {
     fontSize: 24,
@@ -84,18 +98,25 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     marginBottom: 10,
+    fontSize: 14,
   },
   button: {
     backgroundColor: '#007AFF',
-    height: 50,
+    padding: 15,
     borderRadius: 8,
-    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-  },  
+  },
   buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
-}); 
+  label: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#444',
+    marginBottom: 5,
+    marginTop: 10,
+  },
+});

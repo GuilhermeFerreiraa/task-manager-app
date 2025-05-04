@@ -1,86 +1,44 @@
-import { Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
-import { Box } from '../../components';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { Link } from 'expo-router';
-import { Task } from '../../types/task';
-import api from '../../services/api';
 
-export default function Tasks() {
-  const queryClient = useQueryClient();
+import { Box, TaskList } from '@/components';
 
-  const { data: tasks, isLoading } = useQuery<Task[]>({
-    queryKey: ['tasks'],
-    queryFn: async () => {
-      const response = await api.get('/tasks');
-      return response.data;
-    },
-  });
+import { useDashboard } from '@/hooks/tabs/useDashboard';
 
-  const deleteMutation = useMutation({
-    mutationFn: async (taskId: string) => {
-      await api.delete(`/tasks/${taskId}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-    },
-  });
-
-  const handleDeleteTask = (taskId: string) => {
-    deleteMutation.mutate(taskId);
-  };
-
-  if (isLoading) {
-    return (
-      <Box style={styles.container}>
-        <Text>Carregando...</Text>
-      </Box>
-    );
-  }
+export default function TasksScreen() {
+  const { tasks, isLoading, handleDeleteTask } = useDashboard();
 
   return (
-    <Box style={styles.container}>
-      <Box style={styles.header}>
-        <Text style={styles.title}>Minhas Tarefas</Text>
-        <Link href="/(tabs)/new-task" asChild>
-          <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>+</Text>
-          </TouchableOpacity>
-        </Link>
-      </Box>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <Box style={styles.container}>
+        <Box style={styles.header}>
+          <Text style={styles.title}>Minhas Tarefas</Text>
+          <Link href="/(tabs)/new-task" asChild>
+            <TouchableOpacity style={styles.addButton} accessibilityRole="button">
+              <Text style={styles.addButtonText}>+</Text>
+            </TouchableOpacity>
+          </Link>
+        </Box>
 
-      <FlatList
-        data={tasks}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Box style={styles.taskItem}>
-            <Text style={styles.taskTitle}>{item.title}</Text>
-            {item.description && (
-              <Text style={styles.taskDescription}>{item.description}</Text>
-            )}
-            <Box style={styles.taskActions}>
-              <Link href={`/(tabs)/edit-task/${item.id}`} asChild>
-                <TouchableOpacity style={styles.actionButton}>
-                  <Text style={styles.actionButtonText}>Editar</Text>
-                </TouchableOpacity>
-              </Link>
-              <TouchableOpacity
-                style={[styles.actionButton, styles.deleteButton]}
-                onPress={() => handleDeleteTask(item.id)}
-              >
-                <Text style={styles.actionButtonText}>Excluir</Text>
-              </TouchableOpacity>
-            </Box>
-          </Box>
-        )}
-      />
-    </Box>
+        <TaskList tasks={tasks} isLoading={isLoading} onDeleteTask={handleDeleteTask} />
+      </Box>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 0,
+    paddingBottom: 20,
   },
   header: {
     flexDirection: 'row',

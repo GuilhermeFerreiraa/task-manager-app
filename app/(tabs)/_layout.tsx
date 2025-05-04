@@ -1,48 +1,46 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+
 import { Tabs } from 'expo-router';
-import { useAuthStore } from 'store/auth';
-import { router } from 'expo-router';
-import { Platform } from 'react-native';
 
-export default function TabsLayout() {
-  const { token } = useAuthStore();
+import { Dashboard, PlusSvg, UserSvg } from '@/components/icons';
 
-  if (!token) {
-    router.replace('/(auth)/login');
-    return null;
-  }
-
+export default function TabLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: Platform.select({
-          ios: {
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Tarefas',
-          tabBarIcon: () => '📋',
+    <BottomSheetModalProvider>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: '#00ADEE',
+          headerShown: false,
         }}
-      />
-      <Tabs.Screen
-        name="new-task"
-        options={{
-          title: 'Nova Tarefa',
-          tabBarIcon: () => '➕',
-        }}
-      />
-      <Tabs.Screen
-        name="edit-task/[id]"
-        options={{
-          title: 'Editar Tarefa',
-          tabBarIcon: () => '✏️',
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Board',
+            tabBarIcon: ({ focused }) => (
+              <Dashboard fill={focused ? '#00ADEE' : '#404040'} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="new-task"
+          options={{
+            title: 'Nova Tarefa',
+            tabBarIcon: ({ focused }) => (
+              <PlusSvg fill={focused ? '#00ADEE' : '#404040'} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: 'Perfil',
+            tabBarIcon: ({ focused }) => (
+              <UserSvg fill={focused ? '#00ADEE' : '#404040'} />
+            ),
+          }}
+        />
+      </Tabs>
+    </BottomSheetModalProvider>
   );
 }
