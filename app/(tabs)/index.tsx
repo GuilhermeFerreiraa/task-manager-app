@@ -7,23 +7,26 @@ import { Link } from 'expo-router';
 import { Box, TaskList } from '@/components';
 
 import { useDashboard } from '@/hooks/tabs/useDashboard';
+import { useAuthStore } from '@/src/store/auth';
 
 export default function TasksScreen() {
-  const { tasks, isLoading, handleDeleteTask } = useDashboard();
+  const { tasks, isLoading, handleDeleteTask, refetch } = useDashboard();
+  const user = useAuthStore(state => state.user);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <Box style={styles.container}>
         <Box style={styles.header}>
-          <Text style={styles.title}>Minhas Tarefas</Text>
+          <Text style={styles.title}>{`Olá, ${user?.name}!`}</Text>
           <Link href="/(tabs)/new-task" asChild>
             <TouchableOpacity style={styles.addButton} accessibilityRole="button">
               <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>
           </Link>
         </Box>
+        <Text style={styles.subtitle}>Minhas Tarefas</Text>
 
-        <TaskList tasks={tasks} isLoading={isLoading} onDeleteTask={handleDeleteTask} />
+        <TaskList tasks={tasks} isLoading={isLoading} onDeleteTask={handleDeleteTask} onRefresh={refetch} />
       </Box>
     </SafeAreaView>
   );
@@ -36,9 +39,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    marginTop: 20,
     paddingHorizontal: 20,
     paddingTop: 0,
-    paddingBottom: 20,
   },
   header: {
     flexDirection: 'row',
@@ -49,6 +52,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  subtitle: {
+    marginTop: 10,
+    fontSize: 22,
+    fontWeight: 'medium',
+    paddingBottom: 4,
   },
   addButton: {
     backgroundColor: '#007AFF',
