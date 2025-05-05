@@ -1,19 +1,50 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 
-import { Box, Input, SelectButton } from '@/components';
+import { Box, Button, Input, SelectButton } from '@/components';
 
 import { useNewTask } from '@/hooks/tabs/useNewTask';
 
 import { priorities } from '@/utils/options';
+import { prioritySchemaEnum } from '@/types/enums/Priority';
 
 export default function NewTaskScreen() {
-  const { control, handleSubmit, errors, onSubmit, selectedId, setSelectedId } =
-    useNewTask();
+  
+  const { 
+    control, 
+    handleSubmit, 
+    onSubmit, 
+    selectedId, 
+    setSelectedId, 
+    reset,
+    isLoading
+  } = useNewTask();   
+
+  useFocusEffect(
+    useCallback(() => {
+      reset({
+        title: '',
+        description: '',
+        due_date: '',
+      });
+      setSelectedId(prioritySchemaEnum.LOW);
+    }, [reset, setSelectedId])
+  );
+
+  const handleClearForm = () => {
+    reset({
+      title: '',
+      description: '',
+      due_date: '',
+    });
+    setSelectedId(prioritySchemaEnum.LOW);
+  };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <Box style={styles.container}>
         <Text style={styles.title}>Nova Tarefa</Text>
 
@@ -21,7 +52,6 @@ export default function NewTaskScreen() {
           name="title"
           control={control}
           label="Título"
-          error={errors.title?.message}
           placeholder="Título"
         />
 
@@ -29,7 +59,6 @@ export default function NewTaskScreen() {
           name="description"
           control={control}
           label="Descrição"
-          error={errors.description?.message}
           placeholder="Descrição"
           multiline
           numberOfLines={4}
@@ -51,17 +80,28 @@ export default function NewTaskScreen() {
           name="due_date"
           control={control}
           label="Data de vencimento"
-          error={errors.due_date?.message}
           placeholder="DD/MM/YYYY"
+          keyboardType="numeric"
+          maxLength={10}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSubmit(onSubmit)}
-          accessibilityRole="button"
-        >
-          <Text style={styles.buttonText}>Criar Tarefa</Text>
-        </TouchableOpacity>
+        <Box style={styles.buttonContainer}>
+          <Button
+            title="Criar Tarefa"
+            onPress={handleSubmit(onSubmit)}
+            isLoading={isLoading}
+            variant="primary"
+            style={styles.buttonFlex}
+          />
+          
+          <Button
+            title="Limpar"
+            onPress={handleClearForm}
+            disabled={isLoading}
+            variant="danger"
+            style={styles.buttonFlex}
+          />
+        </Box>
       </Box>
     </SafeAreaView>
   );
@@ -74,6 +114,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
@@ -82,35 +123,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  input: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 10,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-    paddingTop: 15,
-  },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-    fontSize: 14,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 20,
+    gap: 10,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  buttonFlex: {
+    flex: 1,
   },
   label: {
     fontSize: 16,
