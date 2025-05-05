@@ -12,7 +12,6 @@ export const SelectButton = ({ title, onPress, selected }: SelectButtonProps) =>
   return (
     <Pressable onPress={onPress} style={styles.container} accessibilityRole="button">
       <Box
-        width={100}
         marginHorizontal={10}
         justifyContent="center"
         borderWidth={2}

@@ -22,7 +22,7 @@ const postLogin = async (params: LoginType): Promise<UserResponseType> => {
   const result = LoginResponse.safeParse(data);
 
   if (!result.success) {
-    console.error('Unable to parse login response', result.error.message);
+    console.warn('Unable to parse login response', result.error.message);
   }
 
   return data.data;
@@ -38,7 +38,7 @@ export const useLogin = () => {
         const status = error.response.status;
         const backendMessage = error.response.data?.message;
 
-        console.error('Login API Error:', status, error.response.data);
+        console.warn('Login API Error:', status, error.response.data);
 
         if (status === 401 || status === 422) {
           errorMessage = backendMessage || 'Usuário ou senha inválida.';
@@ -46,10 +46,10 @@ export const useLogin = () => {
           errorMessage = backendMessage || `Erro ${status} ao fazer login.`;
         }
       } else if (error.request) {
-        console.error('Login Network Error:', error.request);
+        console.warn('Login Network Error:', error.request);
         errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
       } else {
-        console.error('Login Generic Error:', error.message);
+        console.warn('Login Generic Error:', error.message);
       }
 
       showError(errorMessage);

@@ -6,6 +6,8 @@ import { Box } from '@/components';
 
 import { useTask } from '@/hooks/tabs/useTask';
 
+import { formatDate, formatFullDate } from '@/utils/formatDate';
+
 import { statusSchemaEnum } from '@/types/enums/Status';
 
 export default function TaskDetails() {
@@ -27,12 +29,12 @@ export default function TaskDetails() {
       <Text style={styles.status}>
         Status: {task.status === statusSchemaEnum.COMPLETED ? 'Concluída' : 'Pendente'}
       </Text>
-      <Text style={styles.date}>
-        Criada em: {new Date(task.created_at).toLocaleDateString()}
-      </Text>
-      <Text style={styles.date}>
-        Atualizada em: {new Date(task.updated_at).toLocaleDateString()}
-      </Text>
+      <Text style={styles.date}>Criada em: {formatFullDate(task.created_at)}</Text>
+      <Text style={styles.date}>Atualizada em: {formatFullDate(task.updated_at)}</Text>
+
+      {task.due_date && (
+        <Text style={styles.date}>Vencimento: {formatDate(task.due_date)}</Text>
+      )}
 
       <Box style={styles.actions}>
         <TouchableOpacity

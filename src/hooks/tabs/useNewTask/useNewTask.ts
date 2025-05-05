@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { router } from 'expo-router';
 
-import { customParseFormat, dayjs } from '@/libs/dayjs';
+import { customParseFormat, dayjs, timezone, utc } from '@/libs/dayjs';
 import { useForm } from '@/libs/reactHookForm';
 import { queryClient } from '@/libs/reactQuery';
 import { showError, showSuccess } from '@/libs/toast';
@@ -17,6 +17,8 @@ import { statusSchemaEnum } from '@/types/enums/Status';
 import { TaskFormDataType, taskSchema } from '@/types/models/task';
 
 dayjs.extend(customParseFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const useNewTask = () => {
   const [selectedId, setSelectedId] = useState<PriorityType>(prioritySchemaEnum.LOW);
@@ -55,7 +57,7 @@ export const useNewTask = () => {
           return;
         }
 
-        formattedDueDate = parsedDate.format('YYYY-MM-DD');
+        formattedDueDate = parsedDate.hour(12).minute(0).second(0).format('YYYY-MM-DD');
       } else {
         showError('Formato de data inválido. Use DD/MM/AAAA.');
         return;
@@ -93,7 +95,7 @@ export const useNewTask = () => {
         },
         onError: (error) => {
           setIsSubmitting(false);
-          console.error('Erro ao criar tarefa:', error);
+          console.warn('Erro ao criar tarefa:', error);
           showError('Erro ao criar tarefa. Verifique os dados e tente novamente.');
         },
       },

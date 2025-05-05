@@ -9,13 +9,12 @@ import {
   RegisterFormData,
   userResponseSchema,
   type UserResponseType,
-  userSchema,
 } from '@/types/models/auth';
 
 import { paths } from '../../paths';
 import { Response, responseSchema } from '../../types';
 
-const RegisterUserResponse = responseSchema(userSchema);
+const RegisterUserResponse = responseSchema(userResponseSchema);
 
 export const postRegister = async (
   params: RegisterFormData,
@@ -28,7 +27,7 @@ export const postRegister = async (
   const result = RegisterUserResponse.safeParse(data);
 
   if (!result.success) {
-    console.error('Unable to parse register user response ', result.error);
+    console.warn('Unable to parse register user response ', result.error);
   }
 
   return data.data;
@@ -52,7 +51,7 @@ export const useRegister = () => {
         const backendMessage = error.response.data?.message;
         const validationErrors = error.response.data?.errors;
 
-        console.error('Register API Error:', status, error.response.data);
+        console.warn('Register API Error:', status, error.response.data);
 
         if (status === 422) {
           if (validationErrors && typeof validationErrors === 'object') {
@@ -68,10 +67,10 @@ export const useRegister = () => {
           errorMessage = backendMessage || `Erro ${status} ao registrar.`;
         }
       } else if (error.request) {
-        console.error('Register Network Error:', error.request);
+        console.warn('Register Network Error:', error.request);
         errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
       } else {
-        console.error('Register Generic Error:', error.message);
+        console.warn('Register Generic Error:', error.message);
         errorMessage = error.message || errorMessage;
       }
 

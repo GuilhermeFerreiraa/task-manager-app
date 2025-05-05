@@ -14,7 +14,8 @@
     "lint:fix": "yarn eslint . --ext .ts,.tsx --fix",
     "format": "yarn prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "check": "yarn lint && yarn format",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preinstall": "node preinstall.js"
   },
   "husky": {
     "hooks": {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { router, useLocalSearchParams } from 'expo-router';
 
-import { customParseFormat, dayjs } from '@/libs/dayjs';
+import { customParseFormat, dayjs, timezone, utc } from '@/libs/dayjs';
 import { useForm } from '@/libs/reactHookForm';
 import { zodResolver, type z } from '@/libs/zod';
 
@@ -18,6 +18,8 @@ import { editTaskSchema } from '@/types/models/task';
 type EditTaskFormData = z.infer<typeof editTaskSchema>;
 
 dayjs.extend(customParseFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const useEditTask = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -33,10 +35,6 @@ export const useEditTask = () => {
     isError: isTaskError,
     error: taskError,
   } = useGetTaskById(id);
-
-  if (isTaskError) {
-    console.error('--- EditTaskScreen Query Error ---', taskError);
-  }
 
   const {
     control,
@@ -72,7 +70,7 @@ export const useEditTask = () => {
           return;
         }
 
-        formattedDueDate = parsedDate.format('YYYY-MM-DD');
+        formattedDueDate = parsedDate.hour(12).minute(0).second(0).format('YYYY-MM-DD');
       } else {
         showError('Formato de data inválido. Use DD/MM/AAAA.');
         return;

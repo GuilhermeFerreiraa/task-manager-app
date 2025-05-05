@@ -9,12 +9,12 @@ import { Box } from './Box';
 import { TaskDetailSheet } from './TaskDetailSheet/TaskDetailSheet';
 import { TaskListItem } from './TaskListItem';
 
-interface TaskListProps {
+type TaskListProps = {
   tasks: TaskResponseType[] | undefined;
   isLoading: boolean;
   onDeleteTask: (taskId: string) => void;
   onRefresh: () => Promise<TaskResponseType[]>;
-}
+};
 
 export const TaskList = ({
   tasks,
