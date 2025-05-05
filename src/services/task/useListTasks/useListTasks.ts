@@ -1,5 +1,5 @@
 import { useQuery, type UseQueryOptions } from '@/libs/reactQuery';
-import { z } from '@/src/libs/zod';
+import { z } from '@/libs/zod';
 
 import { api } from '@/services/api';
 import { paths } from '@/services/paths';

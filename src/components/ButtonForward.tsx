@@ -6,6 +6,8 @@ import {
   TouchableOpacityProps,
 } from 'react-native';
 
+import React, { forwardRef } from 'react';
+
 import { getButtonStyle } from '@/utils/getColors';
 
 type ButtonProps = TouchableOpacityProps & {
@@ -14,16 +16,13 @@ type ButtonProps = TouchableOpacityProps & {
   variant?: 'primary' | 'secondary' | 'danger';
 };
 
-export const Button = ({
-  title,
-  isLoading = false,
-  variant = 'primary',
-  style,
-  disabled,
-  ...rest
-}: ButtonProps) => {
+export const ButtonForward = forwardRef<
+  React.ElementRef<typeof TouchableOpacity>,
+  ButtonProps
+>(({ title, isLoading = false, variant = 'primary', style, disabled, ...rest }, ref) => {
   return (
     <TouchableOpacity
+      ref={ref}
       style={[
         styles.button,
         getButtonStyle(variant),
@@ -40,7 +39,9 @@ export const Button = ({
       )}
     </TouchableOpacity>
   );
-};
+});
+
+ButtonForward.displayName = 'ButtonForward';
 
 const styles = StyleSheet.create({
   button: {

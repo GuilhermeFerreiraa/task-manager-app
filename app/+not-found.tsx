@@ -3,7 +3,8 @@ import { StyleSheet, Text } from 'react-native';
 import { Link } from 'expo-router';
 
 import { Box } from '@/components';
-import { useIsLoggedIn } from '@/src/store/auth';
+
+import { useIsLoggedIn } from '@/store/auth';
 
 export default function NotFoundScreen() {
   const isLoggedIn = useIsLoggedIn();

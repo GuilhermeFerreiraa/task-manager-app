@@ -25,7 +25,7 @@ const postTask = async (task: TaskFormDataType): Promise<TaskResponseType> => {
   const result = TaskResponseSchema.safeParse(data);
 
   if (!result.success) {
-    console.error('Unable to parse task response', result.error.message);
+    console.warn('Unable to parse task response', result.error.message);
   }
 
   return data.data;

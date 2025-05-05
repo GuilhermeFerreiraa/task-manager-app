@@ -15,11 +15,11 @@ function applyDateMask(text: string): string {
   }
 }
 
-interface InputProps extends TextInputProps {
+type InputProps = TextInputProps & {
   label: string;
   name: Path<any>;
   control: Control<any>;
-}
+};
 
 export const Input = ({
   name,

@@ -7,7 +7,6 @@ import { Box, Input, SelectButton } from '@/components';
 
 import { useEditTask } from '@/hooks/tabs/useEditTask';
 
-import { formatDate } from '@/utils/formatDate';
 import { priorities, statuses } from '@/utils/options';
 
 import { prioritySchemaEnum, type PriorityType } from '@/types/enums/Priority';
@@ -32,7 +31,12 @@ export default function EditTaskScreen() {
 
   useEffect(() => {
     if (task) {
-      const formattedDate = task.due_date ? formatDate(task.due_date) : '';
+      let formattedDate = '';
+      if (task.due_date) {
+        const datePart = task.due_date.split('T')[0];
+        const [year, month, day] = datePart.split('-');
+        formattedDate = `${day}/${month}/${year}`;
+      }
 
       reset({
         title: task.title,
@@ -109,8 +113,15 @@ export default function EditTaskScreen() {
           ))}
         </Box>
 
-        <Text style={styles.label}>Status</Text>
-        <Box flexDirection="row" marginTop={8} marginBottom={18}>
+        <Text style={styles.label}>Status:</Text>
+        <Box
+          flexDirection="row"
+          width="100%"
+          alignItems="center"
+          justifyContent="center"
+          marginTop={8}
+          marginBottom={18}
+        >
           {statuses.map((option) => (
             <SelectButton
               key={option.id}

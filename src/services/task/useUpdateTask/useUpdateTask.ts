@@ -22,7 +22,15 @@ export const useUpdateTask = () => {
     mutationFn: updateTask,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.tasks,
+        queryKey: [queryKeys.tasks],
+        exact: false,
+        refetchType: 'all',
+      });
+
+      queryClient.refetchQueries({
+        queryKey: [queryKeys.tasks],
+        exact: false,
+        type: 'all',
       });
     },
   });

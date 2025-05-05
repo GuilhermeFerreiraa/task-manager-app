@@ -5,9 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 
 import { Box, TaskList } from '@/components';
-import { useAuthStore } from '@/src/store/auth';
 
 import { useDashboard } from '@/hooks/tabs/useDashboard';
+
+import { useAuthStore } from '@/store/auth';
 
 export default function TasksScreen() {
   const { tasks, isLoading, handleDeleteTask, refetch } = useDashboard();

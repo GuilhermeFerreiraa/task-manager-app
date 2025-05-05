@@ -4,48 +4,26 @@ import React from 'react';
 
 import { Link } from 'expo-router';
 
-import { PriorityType } from '@/src/types/enums/Priority';
-import { StatusSchema } from '@/src/types/enums/Status';
+import { Box } from '@/components/Box';
+import { Button } from '@/components/Button';
+import { ButtonForward } from '@/components/ButtonForward';
+
+import { formatDate } from '@/utils/formatDate';
+import { getPriorityColor, getStatusColor } from '@/utils/getColors';
 
 import { TaskResponseType } from '@/types/models/task';
 
-import { Box } from './Box';
-
-interface TaskListItemProps {
+type TaskListItemProps = {
   task: TaskResponseType;
   onDelete: (taskId: string) => void;
   onPressItem: (task: TaskResponseType) => void;
-}
-
-const getPriorityColor = (priority: PriorityType): string => {
-  switch (priority) {
-    case 'HIGH':
-      return '#FF3B30';
-    case 'MEDIUM':
-      return '#FF9500';
-    case 'LOW':
-      return '#34C759';
-    default:
-      return '#8E8E93';
-  }
-};
-
-const getStatusColor = (status: StatusSchema): string => {
-  switch (status) {
-    case 'PENDING':
-      return '#FFCC00';
-    case 'COMPLETED':
-      return '#34C759';
-    default:
-      return '#8E8E93';
-  }
 };
 
 export const TaskListItem = React.memo(
   ({ task, onDelete, onPressItem }: TaskListItemProps) => {
     const descriptionText = task.description ? String(task.description) : null;
     const dueDateText = task.due_date
-      ? `Vencimento: ${new Date(task.due_date as string).toLocaleDateString('pt-BR')}`
+      ? `Vencimento: ${formatDate(task.due_date as string)}`
       : null;
 
     return (
@@ -61,7 +39,7 @@ export const TaskListItem = React.memo(
               style={[
                 styles.detailChip,
                 {
-                  backgroundColor: getStatusColor(task.status as StatusSchema),
+                  backgroundColor: getStatusColor(task.status),
                 },
               ]}
             >
@@ -71,7 +49,7 @@ export const TaskListItem = React.memo(
               style={[
                 styles.detailChip,
                 {
-                  backgroundColor: getPriorityColor(task.priority as PriorityType),
+                  backgroundColor: getPriorityColor(task.priority),
                 },
               ]}
             >
@@ -82,24 +60,26 @@ export const TaskListItem = React.memo(
 
           <Box style={styles.taskActions}>
             <Link href={`/edit-task/${String(task.id)}`} asChild>
-              <TouchableOpacity
-                style={styles.actionButton}
+              <ButtonForward
+                title="Editar"
+                variant="primary"
                 accessibilityRole="button"
+                style={styles.actionButton}
                 onPress={(e) => e.stopPropagation()}
-              >
-                <Text style={styles.actionButtonText}>Editar</Text>
-              </TouchableOpacity>
+              />
             </Link>
-            <TouchableOpacity
-              style={[styles.actionButton, styles.deleteButton]}
+
+            <Button
+              title="Excluir"
               onPress={(e) => {
                 e.stopPropagation();
                 onDelete(String(task.id));
               }}
+              isLoading={false}
+              variant="secondary"
               accessibilityRole="button"
-            >
-              <Text style={styles.actionButtonText}>Excluir</Text>
-            </TouchableOpacity>
+              style={[styles.actionButton, styles.deleteButton]}
+            />
           </Box>
         </Box>
       </TouchableOpacity>

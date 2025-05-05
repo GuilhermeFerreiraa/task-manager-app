@@ -14,10 +14,10 @@ import type { TaskResponseType } from '@/types/models/task';
 
 import { Box } from '../Box';
 
-interface TaskDetailSheetProps {
+type TaskDetailSheetProps = {
   task: TaskResponseType | null;
   onDismiss?: () => void;
-}
+};
 
 export const TaskDetailSheet = forwardRef<BottomSheetModal, TaskDetailSheetProps>(
   ({ task, onDismiss }, ref) => {

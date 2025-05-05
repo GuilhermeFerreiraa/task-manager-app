@@ -52,7 +52,7 @@ export default function NewTaskScreen() {
           numberOfLines={4}
         />
 
-        <Text style={styles.label}>Prioridade</Text>
+        <Text style={styles.label}>Prioridade:</Text>
         <Box flexDirection="row" marginTop={18} marginBottom={18}>
           {priorities.map((option) => (
             <SelectButton
