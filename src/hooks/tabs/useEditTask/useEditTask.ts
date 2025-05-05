@@ -5,7 +5,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { customParseFormat, dayjs } from '@/libs/dayjs';
 import { useForm } from '@/libs/reactHookForm';
 import { zodResolver, type z } from '@/libs/zod';
-import { useGetTaskById } from '@/src/services/task';
+import { useGetTaskById } from '@/services/task';
 
 import { useUpdateTask } from '@/services/task/useUpdateTask/useUpdateTask';
 
@@ -55,6 +55,8 @@ export const useEditTask = () => {
   const onSubmit = (formData: EditTaskFormData) => {
     if (!id) return;
 
+    console.log('Form data submitted:', formData);
+
     let formattedDueDate: string | undefined;
     if (
       formData.due_date &&
@@ -62,10 +64,28 @@ export const useEditTask = () => {
       formData.due_date.trim() !== ''
     ) {
       const parsedDate = dayjs(formData.due_date, 'DD/MM/YYYY', true);
+      console.log('Parsed date valid:', parsedDate.isValid());
+      
       if (parsedDate.isValid()) {
+        // Garantir que a data seja futura para passar na validação do backend
+        const today = dayjs().startOf('day');
+        const isAfterToday = parsedDate.isAfter(today);
+        
+        console.log('Date is after today:', isAfterToday);
+        
+        if (!isAfterToday) {
+          showError('A data de vencimento deve ser uma data futura.');
+          return;
+        }
+        
         formattedDueDate = parsedDate.format('YYYY-MM-DD');
+      } else {
+        showError('Formato de data inválido. Use DD/MM/AAAA.');
+        return;
       }
     }
+
+    console.log('Formatted due date:', formattedDueDate);
 
     const finalData = {
       title: formData.title,
@@ -74,6 +94,8 @@ export const useEditTask = () => {
       priority: selectedPriority,
       status: selectedStatus,
     };
+
+    console.log('Final data to send:', finalData);
 
     Object.keys(finalData).forEach((key) => {
       const typedKey = key as keyof typeof finalData;

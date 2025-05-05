@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 
 import { queryClient, useMutation } from '@/libs/reactQuery';
-import { useGetTaskById } from '@/src/services/task';
+import { useGetTaskById } from '@/services/task';
 
 import { api } from '@/services/api';
 
