@@ -69,12 +69,14 @@ app/                     # Estrutura de rotas do Expo Router
 ## ⚙️ Instalação
 
 1. Clone o repositório:
+
    ```bash
    git clone https://seu-repositorio/task-manager-app.git
    cd task-manager-app
    ```
 
 2. Instale as dependências:
+
    ```bash
    yarn install
    # ou

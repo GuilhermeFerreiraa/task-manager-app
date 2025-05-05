@@ -1,5 +1,4 @@
 import { useListTask } from '@/services/task';
-
 import { useDeleteTask } from '@/services/task/useDeleteTask';
 
 import { showError, showSuccess } from '@/utils/toast';
@@ -34,6 +33,6 @@ export const useDashboard = () => {
     error,
     handleDeleteTask,
     onDeleteTaskMutate,
-    refetch: handleRefresh
+    refetch: handleRefresh,
   };
 };

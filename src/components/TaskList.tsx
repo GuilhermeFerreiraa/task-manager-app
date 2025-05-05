@@ -16,7 +16,12 @@ interface TaskListProps {
   onRefresh: () => Promise<TaskResponseType[]>;
 }
 
-export const TaskList = ({ tasks, isLoading, onDeleteTask, onRefresh }: TaskListProps) => {
+export const TaskList = ({
+  tasks,
+  isLoading,
+  onDeleteTask,
+  onRefresh,
+}: TaskListProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [selectedTask, setSelectedTask] = useState<TaskResponseType | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -42,18 +47,21 @@ export const TaskList = ({ tasks, isLoading, onDeleteTask, onRefresh }: TaskList
     }
   }, [selectedTask]);
 
-  const handleDeleteTask = useCallback((taskId: string) => {
-    if (localTasks) {
-      setLocalTasks(localTasks.filter(task => task.id.toString() !== taskId));
-    }
-    
-    if (selectedTask && selectedTask.id.toString() === taskId) {
-      bottomSheetModalRef.current?.dismiss();
-      setSelectedTask(null);
-    }
-    
-    onDeleteTask(taskId);
-  }, [localTasks, onDeleteTask, selectedTask]);
+  const handleDeleteTask = useCallback(
+    (taskId: string) => {
+      if (localTasks) {
+        setLocalTasks(localTasks.filter((task) => task.id.toString() !== taskId));
+      }
+
+      if (selectedTask && selectedTask.id.toString() === taskId) {
+        bottomSheetModalRef.current?.dismiss();
+        setSelectedTask(null);
+      }
+
+      onDeleteTask(taskId);
+    },
+    [localTasks, onDeleteTask, selectedTask],
+  );
 
   const renderItem = useCallback(
     ({ item }: { item: TaskResponseType }) => (
@@ -89,7 +97,9 @@ export const TaskList = ({ tasks, isLoading, onDeleteTask, onRefresh }: TaskList
         bouncesZoom={false}
         refreshing={isRefreshing}
         onRefresh={handleRefresh}
-        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+        }
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         scrollEventThrottle={16}

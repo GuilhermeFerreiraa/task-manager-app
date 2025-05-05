@@ -40,8 +40,6 @@ export const TaskDetailSheet = forwardRef<BottomSheetModal, TaskDetailSheetProps
       return null;
     }
 
-    console.log('task.due_date', task);
-
     return (
       <BottomSheetModal
         ref={ref}

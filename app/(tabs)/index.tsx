@@ -5,13 +5,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 
 import { Box, TaskList } from '@/components';
+import { useAuthStore } from '@/src/store/auth';
 
 import { useDashboard } from '@/hooks/tabs/useDashboard';
-import { useAuthStore } from '@/src/store/auth';
 
 export default function TasksScreen() {
   const { tasks, isLoading, handleDeleteTask, refetch } = useDashboard();
-  const user = useAuthStore(state => state.user);
+  const user = useAuthStore((state) => state.user);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -26,7 +26,12 @@ export default function TasksScreen() {
         </Box>
         <Text style={styles.subtitle}>Minhas Tarefas</Text>
 
-        <TaskList tasks={tasks} isLoading={isLoading} onDeleteTask={handleDeleteTask} onRefresh={refetch} />
+        <TaskList
+          tasks={tasks}
+          isLoading={isLoading}
+          onDeleteTask={handleDeleteTask}
+          onRefresh={refetch}
+        />
       </Box>
     </SafeAreaView>
   );

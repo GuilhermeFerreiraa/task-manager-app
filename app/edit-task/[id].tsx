@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-
 import { Box, Input, SelectButton } from '@/components';
 
 import { useEditTask } from '@/hooks/tabs/useEditTask';
@@ -19,7 +18,6 @@ export default function EditTaskScreen() {
     control,
     handleSubmit,
     reset,
-    errors,
     isLoadingTask,
     isUpdatingTask,
     onSubmit,
@@ -34,12 +32,8 @@ export default function EditTaskScreen() {
 
   useEffect(() => {
     if (task) {
-      console.log('Task data received:', JSON.stringify(task, null, 2));
-      console.log('Due date from API:', task.due_date);
-      
       const formattedDate = task.due_date ? formatDate(task.due_date) : '';
-      console.log('Formatted date:', formattedDate);
-      
+
       reset({
         title: task.title,
         description: task.description || '',
@@ -83,13 +77,7 @@ export default function EditTaskScreen() {
       <Box style={styles.container}>
         <Text style={styles.title}>Editar Tarefa</Text>
 
-
-        <Input
-          name="title"
-          control={control}
-          label="Título"
-          placeholder="Título"
-        />
+        <Input name="title" control={control} label="Título" placeholder="Título" />
 
         <Input
           name="description"

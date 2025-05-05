@@ -1,9 +1,9 @@
 import { router } from 'expo-router';
 
 import { queryClient, useMutation } from '@/libs/reactQuery';
-import { useGetTaskById } from '@/services/task';
 
 import { api } from '@/services/api';
+import { useGetTaskById } from '@/services/task';
 
 export const useTask = (id: string) => {
   const { data: task } = useGetTaskById(id);

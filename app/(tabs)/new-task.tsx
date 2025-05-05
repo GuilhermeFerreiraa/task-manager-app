@@ -1,27 +1,20 @@
 import { StyleSheet, Text } from 'react-native';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Box, Button, Input, SelectButton } from '@/components';
 
 import { useNewTask } from '@/hooks/tabs/useNewTask';
 
 import { priorities } from '@/utils/options';
+
 import { prioritySchemaEnum } from '@/types/enums/Priority';
 
 export default function NewTaskScreen() {
-  
-  const { 
-    control, 
-    handleSubmit, 
-    onSubmit, 
-    selectedId, 
-    setSelectedId, 
-    reset,
-    isLoading
-  } = useNewTask();   
+  const { control, handleSubmit, onSubmit, selectedId, setSelectedId, reset, isLoading } =
+    useNewTask();
 
   useFocusEffect(
     useCallback(() => {
@@ -31,7 +24,7 @@ export default function NewTaskScreen() {
         due_date: '',
       });
       setSelectedId(prioritySchemaEnum.LOW);
-    }, [reset, setSelectedId])
+    }, [reset, setSelectedId]),
   );
 
   const handleClearForm = () => {
@@ -48,12 +41,7 @@ export default function NewTaskScreen() {
       <Box style={styles.container}>
         <Text style={styles.title}>Nova Tarefa</Text>
 
-        <Input
-          name="title"
-          control={control}
-          label="Título"
-          placeholder="Título"
-        />
+        <Input name="title" control={control} label="Título" placeholder="Título" />
 
         <Input
           name="description"
@@ -93,7 +81,7 @@ export default function NewTaskScreen() {
             variant="primary"
             style={styles.buttonFlex}
           />
-          
+
           <Button
             title="Limpar"
             onPress={handleClearForm}

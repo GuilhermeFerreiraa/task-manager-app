@@ -1,18 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { queryClient } from '@/libs/reactQuery';
+
+import { api } from '@/services/api';
+
 import {
   TaskFormDataType,
   taskResponseSchema,
   TaskResponseType,
 } from '@/types/models/task';
 
-import { api } from '@/services/api';
-
 import { paths } from '../../paths';
 import { queryKeys } from '../../queryKeys';
 import { Response, responseSchema } from '../../types';
-
-import { queryClient } from '@/libs/reactQuery';
 
 const TaskResponseSchema = responseSchema(taskResponseSchema);
 
