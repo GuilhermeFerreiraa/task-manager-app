@@ -1,4 +1,4 @@
-import { prioritySchemaEnum, type PriorityType } from '@/src/types/enums/Priority';
+import { prioritySchemaEnum, type PriorityType } from '@/types/enums/Priority';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import React, { useState } from 'react';

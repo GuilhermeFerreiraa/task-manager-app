@@ -1,5 +1,5 @@
-import { prioritySchemaEnum, type PriorityType } from '@/src/types/enums/Priority';
-import { statusSchemaEnum, type StatusSchema } from '@/src/types/enums/Status';
+import { prioritySchemaEnum, type PriorityType } from '@/types/enums/Priority';
+import { statusSchemaEnum, type StatusSchema } from '@/types/enums/Status';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import { Text, TouchableOpacity, View } from 'react-native';

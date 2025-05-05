@@ -142,6 +142,7 @@ export default [
         Box: 'readonly',
       },
     },
+    ignores: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
   },
   prettierConfig,
 ];
