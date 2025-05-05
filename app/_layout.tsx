@@ -45,6 +45,7 @@ export default function RootLayout() {
             name="edit-task/[id]"
             options={{
               headerShown: true,
+              headerBackButtonDisplayMode: 'minimal',
               title: 'Editar Tarefa',
             }}
           />
