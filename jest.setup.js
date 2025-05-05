@@ -54,7 +54,8 @@ jest.mock('react-hook-form', () => ({
     },
     fieldState: { error: null },
   }),
-  Controller: ({ render }) => render({ field: { value: '', onChange: jest.fn() }, fieldState: { error: null } }),
+  Controller: ({ render }) =>
+    render({ field: { value: '', onChange: jest.fn() }, fieldState: { error: null } }),
 }));
 
 // Mock for expo-constants
@@ -69,10 +70,9 @@ jest.mock('expo-constants', () => ({
 // Mock for react-native-reanimated
 jest.mock('react-native-reanimated', () => {
   const React = require('react');
-  
-  const View = ({ children, ...props }) => 
-    React.createElement('View', props, children);
-  
+
+  const View = ({ children, ...props }) => React.createElement('View', props, children);
+
   return {
     View,
     createAnimatedComponent: (Component) => Component,

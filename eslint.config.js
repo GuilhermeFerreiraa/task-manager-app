@@ -142,7 +142,29 @@ export default [
         Box: 'readonly',
       },
     },
-    ignores: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+  },
+  {
+    files: [
+      'jest.setup.js',
+      '**/__tests__/**/*.[jt]s?(x)',
+      '**/*.test.[jt]s?(x)',
+      '**/*.spec.[jt]s?(x)',
+    ],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
+  {
+    ignores: [
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/__tests__/**',
+      '**/__mocks__/**',
+    ],
   },
   prettierConfig,
 ];

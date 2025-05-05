@@ -41,9 +41,9 @@ describe('Register - Advanced Tests', () => {
         <TouchableOpacity testID="login-link" />
       </View>
     );
-    
+
     render(<RegisterFormTest />);
-    
+
     expect(screen.getByTestId('screen-title')).toHaveTextContent('Cadastro');
     expect(screen.getByTestId('name-input-container')).toBeOnTheScreen();
     expect(screen.getByTestId('email-input-container')).toBeOnTheScreen();
@@ -64,18 +64,18 @@ describe('Register - Advanced Tests', () => {
         </TouchableOpacity>
       </View>
     );
-    
+
     render(<NavigationTest />);
-    
+
     fireEvent.press(screen.getByTestId('login-link'));
-    
+
     expect(router.push).toHaveBeenCalledWith('/(auth)/login');
   });
 
   it('calls submit function when register button is clicked', () => {
     const mockHandleSubmit = jest.fn();
     const mockOnSubmit = jest.fn();
-    
+
     // Simplified component for submission testing
     const SubmissionTest = () => {
       return (
@@ -84,10 +84,10 @@ describe('Register - Advanced Tests', () => {
             testID="register-button"
             onPress={() => {
               mockHandleSubmit();
-              mockOnSubmit({ 
+              mockOnSubmit({
                 name: 'João Silva',
                 email: 'joao@teste.com',
-                password: 'senha123' 
+                password: 'senha123',
               });
             }}
           >
@@ -96,11 +96,11 @@ describe('Register - Advanced Tests', () => {
         </View>
       );
     };
-    
+
     render(<SubmissionTest />);
-    
+
     fireEvent.press(screen.getByTestId('register-button'));
-    
+
     expect(mockHandleSubmit).toHaveBeenCalled();
     expect(mockOnSubmit).toHaveBeenCalled();
   });
