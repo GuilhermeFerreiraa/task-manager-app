@@ -1,7 +1,7 @@
-import { FlatList, Text, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet, Text } from 'react-native';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { TaskResponseType } from '@/types/models/task';
 
@@ -13,11 +13,24 @@ interface TaskListProps {
   tasks: TaskResponseType[] | undefined;
   isLoading: boolean;
   onDeleteTask: (taskId: string) => void;
+  onRefresh: () => Promise<TaskResponseType[]>;
 }
 
-export const TaskList = ({ tasks, isLoading, onDeleteTask }: TaskListProps) => {
+export const TaskList = ({ tasks, isLoading, onDeleteTask, onRefresh }: TaskListProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [selectedTask, setSelectedTask] = useState<TaskResponseType | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [localTasks, setLocalTasks] = useState<TaskResponseType[] | undefined>(tasks);
+
+  useEffect(() => {
+    setLocalTasks(tasks);
+  }, [tasks]);
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    await onRefresh();
+    setIsRefreshing(false);
+  }, [onRefresh]);
 
   const handlePresentModal = useCallback((task: TaskResponseType) => {
     setSelectedTask(task);
@@ -29,15 +42,28 @@ export const TaskList = ({ tasks, isLoading, onDeleteTask }: TaskListProps) => {
     }
   }, [selectedTask]);
 
+  const handleDeleteTask = useCallback((taskId: string) => {
+    if (localTasks) {
+      setLocalTasks(localTasks.filter(task => task.id.toString() !== taskId));
+    }
+    
+    if (selectedTask && selectedTask.id.toString() === taskId) {
+      bottomSheetModalRef.current?.dismiss();
+      setSelectedTask(null);
+    }
+    
+    onDeleteTask(taskId);
+  }, [localTasks, onDeleteTask, selectedTask]);
+
   const renderItem = useCallback(
     ({ item }: { item: TaskResponseType }) => (
       <TaskListItem
         task={item}
-        onDelete={onDeleteTask}
+        onDelete={handleDeleteTask}
         onPressItem={handlePresentModal}
       />
     ),
-    [onDeleteTask, handlePresentModal],
+    [handleDeleteTask, handlePresentModal],
   );
 
   if (isLoading) {
@@ -48,7 +74,7 @@ export const TaskList = ({ tasks, isLoading, onDeleteTask }: TaskListProps) => {
     );
   }
 
-  if (!tasks || tasks.length === 0) {
+  if (!localTasks || localTasks.length === 0) {
     return (
       <Box style={styles.centeredContainer}>
         <Text>Nenhuma tarefa encontrada.</Text>
@@ -59,12 +85,17 @@ export const TaskList = ({ tasks, isLoading, onDeleteTask }: TaskListProps) => {
   return (
     <Box style={styles.container}>
       <FlatList
-        data={tasks}
+        data={localTasks}
+        bouncesZoom={false}
+        refreshing={isRefreshing}
+        onRefresh={handleRefresh}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        extraData={localTasks}
       />
       <TaskDetailSheet
         ref={bottomSheetModalRef}
@@ -85,6 +116,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
+    paddingHorizontal: 2,
+    gap: 12,
+    marginTop: 20,
     paddingBottom: 20,
   },
 });

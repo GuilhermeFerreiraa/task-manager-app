@@ -11,7 +11,7 @@ const UserAccountResponseSchema = responseSchema(taskResponseSchema);
 
 const getTasksById = async (id: string): Promise<TaskResponseType> => {
   const { data } = await api.get<Response<typeof taskResponseSchema>>(
-    `${paths.v1}${paths.tasks}${id}`,
+    `${paths.v1}${paths.tasks}/${id}`,
   );
 
   const res = UserAccountResponseSchema.safeParse(data);
@@ -28,7 +28,7 @@ export const useGetTaskById = (
   options?: Partial<UseQueryOptions<TaskResponseType>>,
 ) =>
   useQuery({
-    queryKey: [queryKeys.tasks],
+    queryKey: [queryKeys.tasks, id],
     queryFn: () => getTasksById(id),
     ...options,
   });

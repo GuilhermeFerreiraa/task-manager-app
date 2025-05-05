@@ -15,7 +15,15 @@ export const useDeleteTask = () => {
     mutationFn: (id: string) => deleteTask(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.tasks,
+        queryKey: [queryKeys.tasks],
+        exact: false,
+        refetchType: 'all',
+      });
+      
+      queryClient.refetchQueries({
+        queryKey: [queryKeys.tasks],
+        exact: false,
+        type: 'all',
       });
     },
   });
