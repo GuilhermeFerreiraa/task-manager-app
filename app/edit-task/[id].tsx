@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { router } from 'expo-router';
 
 import { Box, Input, SelectButton } from '@/components';
 
@@ -33,6 +32,32 @@ export default function EditTaskScreen() {
     selectedStatus,
   } = useEditTask();
 
+  useEffect(() => {
+    if (task) {
+      console.log('Task data received:', JSON.stringify(task, null, 2));
+      console.log('Due date from API:', task.due_date);
+      
+      const formattedDate = task.due_date ? formatDate(task.due_date) : '';
+      console.log('Formatted date:', formattedDate);
+      
+      reset({
+        title: task.title,
+        description: task.description || '',
+        due_date: formattedDate,
+      });
+      setSelectedPriority(
+        task.priority
+          ? (task.priority.toUpperCase() as PriorityType)
+          : prioritySchemaEnum.LOW,
+      );
+      setSelectedStatus(
+        task.status
+          ? (task.status.toUpperCase() as StatusSchema)
+          : statusSchemaEnum.PENDING,
+      );
+    }
+  }, [task, reset]);
+
   if (isLoadingTask) {
     return (
       <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -53,41 +78,16 @@ export default function EditTaskScreen() {
     );
   }
 
-  useEffect(() => {
-    if (task) {
-      const formattedDate = task.due_date ? formatDate(task.due_date) : '';
-      reset({
-        title: task.title,
-        description: task.description || '',
-        due_date: formattedDate,
-      });
-      setSelectedPriority(
-        task.priority
-          ? (task.priority.toUpperCase() as PriorityType)
-          : prioritySchemaEnum.LOW,
-      );
-      setSelectedStatus(
-        task.status
-          ? (task.status.toUpperCase() as StatusSchema)
-          : statusSchemaEnum.PENDING,
-      );
-    }
-  }, [task, reset]);
-
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <Box style={styles.container}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>{'< Voltar'}</Text>
-        </TouchableOpacity>
-
         <Text style={styles.title}>Editar Tarefa</Text>
+
 
         <Input
           name="title"
           control={control}
           label="Título"
-          error={errors.title?.message}
           placeholder="Título"
         />
 
@@ -95,7 +95,6 @@ export default function EditTaskScreen() {
           name="description"
           control={control}
           label="Descrição"
-          error={errors.description?.message}
           placeholder="Descrição"
           multiline
           numberOfLines={4}
@@ -105,7 +104,6 @@ export default function EditTaskScreen() {
           name="due_date"
           control={control}
           label="Data de vencimento (DD/MM/YYYY)"
-          error={errors.due_date?.message}
           placeholder="DD/MM/YYYY"
           keyboardType="numeric"
           maxLength={10}
@@ -153,15 +151,13 @@ export default function EditTaskScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 20,
+    justifyContent: 'flex-start',
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-  },
-  backButton: {
-    marginBottom: 20,
+    justifyContent: 'space-between',
+    gap: 4,
   },
   backButtonText: {
     fontSize: 16,
