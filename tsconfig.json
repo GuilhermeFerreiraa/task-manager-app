@@ -15,7 +15,8 @@
       "@/store/*": ["./src/store/*"],
       "@/libs/*": ["./src/libs/*"],
       "@/services/*": ["./src/services/*"],
-      "@/storage/*": ["./src/storage/*"]
+      "@/storage/*": ["./src/storage/*"],
+      "@/providers/*": ["./src/providers/*"]
     }
   },
   "include": [
