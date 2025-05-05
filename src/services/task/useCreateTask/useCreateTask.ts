@@ -1,17 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { queryClient } from '@/libs/reactQuery';
 import {
   TaskFormDataType,
   taskResponseSchema,
   TaskResponseType,
-} from '@/src/types/models/task';
+} from '@/types/models/task';
 
 import { api } from '@/services/api';
 
 import { paths } from '../../paths';
 import { queryKeys } from '../../queryKeys';
-import { responseSchema, Response } from '../../types';
+import { Response, responseSchema } from '../../types';
+
+import { queryClient } from '@/libs/reactQuery';
 
 const TaskResponseSchema = responseSchema(taskResponseSchema);
 
@@ -35,7 +36,15 @@ export const useCreateTask = () => {
     mutationFn: (task: TaskFormDataType) => postTask(task),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.tasks,
+        queryKey: [queryKeys.tasks],
+        exact: false,
+        refetchType: 'all',
+      });
+
+      queryClient.refetchQueries({
+        queryKey: [queryKeys.tasks],
+        exact: false,
+        type: 'all',
       });
     },
   });

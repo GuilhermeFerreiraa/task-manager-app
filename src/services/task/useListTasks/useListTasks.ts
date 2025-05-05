@@ -1,4 +1,3 @@
-import { useQuery, type UseQueryOptions } from '@/libs/reactQuery';
 import { z } from '@/src/libs/zod';
 
 import { api } from '@/services/api';
@@ -7,6 +6,8 @@ import { queryKeys } from '@/services/queryKeys';
 import { responseSchema, type Response } from '@/services/types';
 
 import { taskResponseSchema, type TaskResponseType } from '@/types/models/task';
+
+import { useQuery, type UseQueryOptions } from '@/libs/reactQuery';
 
 const ResponseTasksSchema = z.array(taskResponseSchema);
 const ResponseSchema = responseSchema(ResponseTasksSchema);
@@ -29,5 +30,8 @@ export const useListTask = (options?: Partial<UseQueryOptions<TaskResponseType[]
   useQuery({
     queryKey: [queryKeys.tasks],
     queryFn: () => getTasks(),
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
     ...options,
   });
